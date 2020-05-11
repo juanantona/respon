@@ -1,0 +1,21 @@
+env:
+  browser: true
+  commonjs: true
+  es6: true
+  node: true
+  jest: true
+plugins:
+  - prettier
+  - jest
+  - react
+parserOptions:
+  ecmaVersion: 2017
+  sourceType: module
+  ecmaFeatures:
+  	jsx: true
+extends:
+  - eslint:recommended
+  - prettier
+  - plugin:prettier/recommended
+  - plugin:jest/recommended
+  - react-app
