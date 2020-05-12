@@ -26,10 +26,10 @@ jobs:
       - name: Build
         run: npm run build
       - name: Upload Artifact
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v2
         with:
-          name: build
-          path: build
+          name: build-artifact
+          path: build/
 
   deploy:
     name: Deploy
@@ -41,8 +41,8 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@v2
         with:
-          name: build
-          path: build
+          name: build-artifact
+          path: build/
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
