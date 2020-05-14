@@ -30,6 +30,7 @@ export default function BrothersListPage() {
   const [name, updateName] = useState('');
   const [suremane, updateSurename] = useState('');
   const [brothers, updateBrothers] = useState([]);
+  const [disabledSubmit, updateDisabledSubmit] = useState(true);
 
   useEffect(() => {
     try {
@@ -79,6 +80,12 @@ export default function BrothersListPage() {
     }
   }
 
+  function updateNick(ev) {
+    const nickNameFieldValue = ev.target.value;
+    updateDisabledSubmit(nickNameFieldValue.length < 3 ? true : false);
+    updateNickName(nickNameFieldValue);
+  }
+
   return (
     <Container maxWidth="sm">
       <Box my={4}>
@@ -96,13 +103,10 @@ export default function BrothersListPage() {
                 required
                 label="Nick Name"
                 fullWidth
-                onChange={ev => {
-                  updateNickName(ev.target.value);
-                }}
+                onChange={updateNick}
               />
               <InputText
                 id="name"
-                required
                 label="Name"
                 fullWidth
                 onChange={ev => {
@@ -111,7 +115,6 @@ export default function BrothersListPage() {
               />
               <InputText
                 id="suremane"
-                required
                 label="Surename"
                 fullWidth
                 onChange={ev => {
@@ -121,7 +124,13 @@ export default function BrothersListPage() {
             </form>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button
+              disabled={disabledSubmit}
+              variant="outlined"
+              onClick={handleSubmit}
+            >
+              Add new brother
+            </Button>
           </DialogActions>
         </Dialog>
         <BrothersList brothers={brothers} />
