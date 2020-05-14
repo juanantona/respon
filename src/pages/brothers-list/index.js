@@ -59,7 +59,7 @@ export default function BrothersListPage() {
   }
 
   function handleSubmit() {
-    const body = JSON.stringify({ nick_name: nickName, name, suremane });
+    const newBrotherToAPI = { nick_name: nickName, name, suremane };
 
     try {
       fetch(apiEndpoint, {
@@ -67,7 +67,7 @@ export default function BrothersListPage() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body
+        body: JSON.stringify(newBrotherToAPI)
       })
         .then(response => response.json())
         .then(data => {
