@@ -11,6 +11,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 const apiEndpoint = 'http://localhost:3000/brothers';
 
@@ -22,6 +24,13 @@ const ControlsWrapper = styled(Box)({
 
 const InputText = styled(TextField)({
   marginBottom: '16px'
+});
+
+const CloseModalButton = styled(IconButton)({
+  position: 'absolute',
+  top: '0',
+  right: '0',
+  margin: '8px'
 });
 
 export default function BrothersListPage() {
@@ -94,7 +103,12 @@ export default function BrothersListPage() {
         </Typography>
         <BrothersListControls />
         <Dialog open={openAddModal} onClose={() => updateOpenAddModal(false)}>
-          <DialogTitle>Add a new brother</DialogTitle>
+          <DialogTitle disableTypography>
+            <Typography variant="h5">Add a new brother</Typography>
+            <CloseModalButton onClick={() => updateOpenAddModal(false)}>
+              <CloseIcon />
+            </CloseModalButton>
+          </DialogTitle>
           <DialogContent>
             <form>
               <InputText
