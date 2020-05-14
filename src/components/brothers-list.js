@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -9,27 +9,8 @@ import Avatar from '@material-ui/core/Avatar';
 import PersonIcon from '@material-ui/icons/Person';
 import Checkbox from '@material-ui/core/Checkbox';
 
-const apiEndpoint = 'http://localhost:3000/brothers';
-
-export default function BrothersList() {
-  const [brothers, updateBrothers] = useState([]);
-
-  useEffect(() => {
-    try {
-      fetch(apiEndpoint, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(response => response.json())
-        .then(data => {
-          updateBrothers(data);
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+export default function BrothersList(props) {
+  const { brothers } = props;
 
   return (
     <List>
