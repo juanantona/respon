@@ -13,6 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+import AddIcon from '@material-ui/icons/Add';
 
 const apiEndpoint = 'http://localhost:3000/brothers';
 
@@ -62,7 +63,7 @@ export default function BrothersListPage() {
     return (
       <ControlsWrapper>
         <Button onClick={() => updateOpenAddModal(true)} variant="contained">
-          Add brother
+          <AddIcon />
         </Button>
       </ControlsWrapper>
     );
