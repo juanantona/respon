@@ -19,9 +19,6 @@ const ControlsWrapper = styled(Box)({
 
 export default function BrothersListPage() {
   const [openAddModal, updateOpenAddModal] = useState(false);
-  const [nickName, updateNickName] = useState('');
-  const [name, updateName] = useState('');
-  const [suremane, updateSurename] = useState('');
   const [brothers, updateBrothers] = useState([]);
 
   useEffect(() => {
@@ -51,27 +48,6 @@ export default function BrothersListPage() {
     );
   }
 
-  function handleSubmit() {
-    const newBrotherToAPI = { nick_name: nickName, name, suremane };
-
-    try {
-      fetch(apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newBrotherToAPI)
-      })
-        .then(response => response.json())
-        .then(data => {
-          updateBrothers(data);
-          updateOpenAddModal(false);
-        });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   return (
     <Container maxWidth="sm">
       <Box my={4}>
@@ -82,10 +58,7 @@ export default function BrothersListPage() {
         <AddBrotherForm
           openAddModal={openAddModal}
           updateOpenAddModal={updateOpenAddModal}
-          updateNickName={updateNickName}
-          updateName={updateName}
-          updateSurename={updateSurename}
-          handleSubmit={handleSubmit}
+          updateBrothers={updateBrothers}
         />
         <BrothersList brothers={brothers} />
         <Copyright />

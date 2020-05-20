@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { styled } from '@material-ui/core/styles';
@@ -9,6 +9,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
+
+const apiEndpoint = 'http://localhost:3000/brothers';
 
 const InputText = styled(TextField)({
   marginBottom: '16px'
@@ -22,25 +24,52 @@ const CloseModalButton = styled(IconButton)({
 });
 
 export default function AddBrotherForm(props) {
-  const {
-    openAddModal,
-    updateOpenAddModal,
-    updateNickName,
-    updateName,
-    updateSurename,
-    handleSubmit
-  } = props;
-
+  const { openAddModal, updateOpenAddModal, updateBrothers } = props;
   const [disabledSubmit, updateDisabledSubmit] = useState(true);
+  const [brother, updateBrother] = useState({});
 
-  function updateNick(ev) {
-    const nickNameFieldValue = ev.target.value;
-    updateDisabledSubmit(nickNameFieldValue.length < 3 ? true : false);
-    updateNickName(nickNameFieldValue);
+  useEffect(() => {
+    const nickName = brother['nickName'] || '';
+    updateDisabledSubmit(true);
+    if (nickName.length >= 3) {
+      updateDisabledSubmit(false);
+    }
+  }, [brother]);
+
+  function handleChange(ev) {
+    const { id, value } = ev.target;
+    updateBrother({ ...brother, [id]: value });
+  }
+
+  function handleModalClose() {
+    updateDisabledSubmit(true);
+    updateOpenAddModal(false);
+  }
+
+  function handleSubmit() {
+    const { nickName, name, suremane } = brother;
+    const newBrotherToAPI = { nick_name: nickName, name, suremane };
+
+    try {
+      fetch(apiEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newBrotherToAPI)
+      })
+        .then(response => response.json())
+        .then(data => {
+          updateBrothers(data);
+          updateOpenAddModal(false);
+        });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
-    <Dialog open={openAddModal} onClose={() => updateOpenAddModal(false)}>
+    <Dialog open={openAddModal} onClose={handleModalClose}>
       <DialogTitle disableTypography>
         <Typography variant="h5">Add a new brother</Typography>
         <CloseModalButton onClick={() => updateOpenAddModal(false)}>
@@ -55,23 +84,14 @@ export default function AddBrotherForm(props) {
             required
             label="Nick Name"
             fullWidth
-            onChange={updateNick}
+            onChange={handleChange}
           />
-          <InputText
-            id="name"
-            label="Name"
-            fullWidth
-            onChange={ev => {
-              updateName(ev.target.value);
-            }}
-          />
+          <InputText id="name" label="Name" fullWidth onChange={handleChange} />
           <InputText
             id="suremane"
             label="Surename"
             fullWidth
-            onChange={ev => {
-              updateSurename(ev.target.value);
-            }}
+            onChange={handleChange}
           />
         </form>
       </DialogContent>
