@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { styled } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -9,7 +9,9 @@ import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import EditBrotherForm from '../components/forms/edit-brother';
+import DeleteBrotherModal from '../components/delete-brother-modal';
 
 const ListWrapper = styled(List)({
   '& li': {
@@ -26,13 +28,17 @@ const ListWrapper = styled(List)({
 });
 
 const ControlsWrapper = styled(ListItemSecondaryAction)({
-  display: 'none'
+  display: 'none',
+  '& button': {
+    marginRight: '5px'
+  }
 });
 
 export default function BrothersList(props) {
   const { brothers, updateBrothers } = props;
   const [brotherId, updateBrotherId] = useState('');
   const [showEditForm, updateShowEditForm] = useState(false);
+  const [showDeleteModal, updateShowDeleteModal] = useState(false);
 
   function handleShowEditForm(brotherId) {
     updateBrotherId(brotherId);
@@ -42,6 +48,16 @@ export default function BrothersList(props) {
   function handleHideEditForm() {
     updateBrotherId('');
     updateShowEditForm(false);
+  }
+
+  function handleShowDeleteModal(brotherId) {
+    updateBrotherId(brotherId);
+    updateShowDeleteModal(true);
+  }
+
+  function handleHideDeleteModal() {
+    updateBrotherId('');
+    updateShowDeleteModal(false);
   }
 
   return (
@@ -65,6 +81,15 @@ export default function BrothersList(props) {
               >
                 <EditIcon />
               </IconButton>
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => {
+                  handleShowDeleteModal(brother._id);
+                }}
+              >
+                <DeleteIcon />
+              </IconButton>
             </ControlsWrapper>
           </ListItem>
         ))}
@@ -74,6 +99,13 @@ export default function BrothersList(props) {
           brotherId={brotherId}
           updateBrothers={updateBrothers}
           handleHideEditForm={handleHideEditForm}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteBrotherModal
+          brotherId={brotherId}
+          updateBrothers={updateBrothers}
+          handleHideDeleteModal={handleHideDeleteModal}
         />
       )}
     </React.Fragment>
