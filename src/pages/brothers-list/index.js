@@ -60,7 +60,7 @@ export default function BrothersListPage() {
           updateOpenAddModal={updateOpenAddModal}
           updateBrothers={updateBrothers}
         />
-        <BrothersList brothers={brothers} />
+        <BrothersList brothers={brothers} updateBrothers={updateBrothers} />
         <Copyright />
       </Box>
     </Container>

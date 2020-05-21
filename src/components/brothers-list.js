@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
+import EditBrotherForm from '../components/forms/edit-brother';
 
 const ListWrapper = styled(List)({
   '& li': {
@@ -29,25 +30,52 @@ const ControlsWrapper = styled(ListItemSecondaryAction)({
 });
 
 export default function BrothersList(props) {
-  const { brothers } = props;
+  const { brothers, updateBrothers } = props;
+  const [brotherId, updateBrotherId] = useState('');
+  const [showEditForm, updateShowEditForm] = useState(false);
+
+  function handleShowEditForm(brotherId) {
+    updateBrotherId(brotherId);
+    updateShowEditForm(true);
+  }
+
+  function handleHideEditForm() {
+    updateBrotherId('');
+    updateShowEditForm(false);
+  }
 
   return (
-    <ListWrapper>
-      {brothers.map((brother, index) => (
-        <ListItem key={index}>
-          <ListItemAvatar>
-            <Avatar>
-              <PersonIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary={brother.nick_name} />
-          <ControlsWrapper className="brother-controls">
-            <IconButton edge="end" aria-label="edit">
-              <EditIcon />
-            </IconButton>
-          </ControlsWrapper>
-        </ListItem>
-      ))}
-    </ListWrapper>
+    <React.Fragment>
+      <ListWrapper>
+        {brothers.map((brother, index) => (
+          <ListItem key={index}>
+            <ListItemAvatar>
+              <Avatar>
+                <PersonIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={brother.nick_name} />
+            <ControlsWrapper className="brother-controls">
+              <IconButton
+                edge="end"
+                aria-label="edit"
+                onClick={() => {
+                  handleShowEditForm(brother._id);
+                }}
+              >
+                <EditIcon />
+              </IconButton>
+            </ControlsWrapper>
+          </ListItem>
+        ))}
+      </ListWrapper>
+      {showEditForm && (
+        <EditBrotherForm
+          brotherId={brotherId}
+          updateBrothers={updateBrothers}
+          handleHideEditForm={handleHideEditForm}
+        />
+      )}
+    </React.Fragment>
   );
 }
